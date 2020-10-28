@@ -6,6 +6,8 @@ export class SceneMenu extends Scene {
     super("SceneMenu");
   }
   create() {
+    this.sound.play("background-music");
+
     this.input.keyboard.on(`keydown-SPACE`, this.handleSpaceClick, this);
 
     this.add.image(0, 0, "menu-background").setOrigin(0, 0);

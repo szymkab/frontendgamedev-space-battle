@@ -38,9 +38,28 @@ export class SceneGame extends Scene {
 
     this.asteroids = this.physics.add.group();
     this.createAsteroids();
+    this.asteroidsInterval = setInterval(this.createAsteroids.bind(this), 10000);
 
     this.physics.add.collider(this.asteroids);
     this.physics.add.collider(this.asteroids, this.ship, this.handleAsteroidAndShipCollision, null, this);
+
+    const explosionFrameNames = this.anims.generateFrameNumbers("explosion");
+    this.anims.create({
+      key: "boom",
+      frames: [...[...explosionFrameNames].reverse(), ...explosionFrameNames],
+      frameRate: 48,
+      repeat: false,
+    });
+
+    const bulletFrameNames = this.anims.generateFrameNumbers("bullets");
+    this.anims.create({
+      key: "fire",
+      frames: bulletFrameNames,
+      frameRate: 5,
+      repeat: false,
+    });
+
+    this.explosionSound = this.sound.add("asteroid-explosion");
   }
   handleAsteroidAndShipCollision(ship, asteroid) {
     this.hitPoints -= 10;
@@ -48,6 +67,7 @@ export class SceneGame extends Scene {
     this.handleAsteroidDestroy(asteroid);
 
     if (this.hitPoints === 0) {
+      clearInterval(this.asteroidsInterval);
       this.scene.start("SceneGameOver");
     }
   }
@@ -80,6 +100,7 @@ export class SceneGame extends Scene {
   }
   handleSpaceClick() {
     const bullet = this.physics.add.sprite(this.ship.x, this.ship.y, "bullets", 0);
+    bullet.play("fire");
     this.physics.velocityFromAngle(this.ship.angle - 90, 600, bullet.body.velocity);
     this.physics.add.collider(this.asteroids, bullet, this.handleBulletHitAsteroid, null, this);
   }
@@ -88,6 +109,9 @@ export class SceneGame extends Scene {
     this.handleAsteroidDestroy(asteroid);
   }
   handleAsteroidDestroy(asteroid) {
+    this.explosionSound.play();
+    const explosion = this.add.sprite(asteroid.x, asteroid.y, "explosion");
+    explosion.play("boom");
     asteroid.destroy();
     this.points += 1;
     this.pointsText.text = `Points ${this.points}`;
