@@ -43,6 +43,6 @@ export class SceneLoad extends Scene {
     this.progress.setText(`Loading ${percent}%`);
   }
   create() {
-    this.scene.start("SceneGame");
+    this.scene.start("SceneMenu");
   }
 }

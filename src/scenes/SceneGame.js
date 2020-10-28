@@ -46,6 +46,10 @@ export class SceneGame extends Scene {
     this.hitPoints -= 10;
     this.hitPointsText.text = `${this.hitPoints} HP`;
     this.handleAsteroidDestroy(asteroid);
+
+    if (this.hitPoints === 0) {
+      this.scene.start("SceneGameOver");
+    }
   }
   createAsteroids() {
     for (let i = 0; i < 10; i++) {
