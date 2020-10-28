@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { CONFIG } from "./constants/config";
+import { SceneGame } from "./scenes/SceneGame";
 import { SceneLoad } from "./scenes/SceneLoad";
 
 export const config = {
@@ -7,7 +8,13 @@ export const config = {
   parent: "phaser-example",
   width: CONFIG.gameWidth,
   height: CONFIG.gameHeight,
-  scene: [SceneLoad],
+  physics: {
+    default: "arcade",
+    arcade: {
+      debug: false,
+    },
+  },
+  scene: [SceneLoad, SceneGame],
 };
 
 const game = new Phaser.Game(config);

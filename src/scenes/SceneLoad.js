@@ -42,4 +42,7 @@ export class SceneLoad extends Scene {
     const percent = Math.floor(value * 100);
     this.progress.setText(`Loading ${percent}%`);
   }
+  create() {
+    this.scene.start("SceneGame");
+  }
 }
